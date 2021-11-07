@@ -1,0 +1,24 @@
+{
+	"id": "63daf6bf-afb8-4343-b148-0e2eadfdaa6d",
+	"name": "agileone接口环境变量",
+	"values": [
+		{
+			"key": "username",
+			"value": "admin",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "admin",
+			"enabled": true
+		},
+		{
+			"key": "proposalID",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2021-08-30T13:29:10.713Z",
+	"_postman_exported_using": "Postman/8.11.1"
+}

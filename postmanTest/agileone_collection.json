@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "e9847047-7292-4ed6-8a28-d5f7d654f663",
+		"name": "agileone接口测试",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "agileone登录接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"登录返回成功\", function () {\r",
+							"    pm.response.to.have.body(data.loginAssert);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{username1}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password1}}",
+							"type": "text"
+						},
+						{
+							"key": "savelogin",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/common/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"common",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agileone新增需求提案接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"发帖id验证\", function () {\r",
+							"    console.log(pm.response.text())\r",
+							"    pm.expect(pm.response.text().replace('\\n',\"\")).to.matches(new RegExp(/\\d{1,5}/g));\r",
+							"});\r",
+							" pm.environment.set(\"proposalID\", pm.response.text());\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "type",
+							"value": "Requirement",
+							"type": "text"
+						},
+						{
+							"key": "importance",
+							"value": "Medium",
+							"type": "text"
+						},
+						{
+							"key": "headline",
+							"value": "{{headline}}+{{$timestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "{{content}}+{{$randomInt}}",
+							"type": "text"
+						},
+						{
+							"key": "processresult",
+							"value": "processresult",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/proposal/add?type=Requirement&importance=Medium&headline=这是一条需求提案的标题20221234&content=这是需求提案的内容1252&processresult=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"proposal",
+						"add"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Requirement"
+						},
+						{
+							"key": "importance",
+							"value": "Medium"
+						},
+						{
+							"key": "headline",
+							"value": "这是一条需求提案的标题20221234"
+						},
+						{
+							"key": "content",
+							"value": "这是需求提案的内容1252"
+						},
+						{
+							"key": "processresult",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agileone需求提案查询接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"查询发帖验证\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].proposalid).to.matches(new RegExp(data.proposalAssert));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "currentpage",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/proposal/query?currentpage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"proposal",
+						"query"
+					],
+					"query": [
+						{
+							"key": "currentpage",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agileone编辑需求提案接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"编辑需求提案返回验证\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"1\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "proposalid",
+							"value": "{{proposalID}}",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "Requirement",
+							"type": "text"
+						},
+						{
+							"key": "importance",
+							"value": "Medium",
+							"type": "text"
+						},
+						{
+							"key": "headline",
+							"value": "This is a headline of proposal+{{$isoTimestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "This is a content of proposal+{{$isoTimestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "processresult",
+							"value": "processresult",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/proposal/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"proposal",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agileone删除需求提案接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"删除需求提案验证\", function () {\r",
+							"    pm.response.to.have.body(\"1\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "proposalid",
+							"value": "{{proposalID}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/proposal/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"proposal",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agileone退出接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//cooke提取器方法1\r",
+							" var time2 = postman.getResponseCookie(\"PHPSESSID\");\r",
+							"// console.log(time2.value);\r",
+							"//cooke提取器方法2\r",
+							"var path = pm.cookies.get(\"PHPSESSID\");\r",
+							"\r",
+							"//header提取器\r",
+							"var cooike1 =pm.response.headers.get(\"Set-Cookie\");\r",
+							"var timestap = cooike1.match(new RegExp ('expires=Thu, (.*?) GMT'))[1];   //利用正则表达是提取setcookie中动态内容\r",
+							"pm.environment.set(\"timestap\", timestap);  //提取到内容设置为环境变量\r",
+							"//console.log(timestap);\r",
+							"\r",
+							"//返回的内容做拼接password=deleted; expires=Thu, 10-Sep-2020 20:30:34 GMT; path=/\r",
+							" var part1 = \"password=deleted; expires=Thu, \";\r",
+							" var part2 =  pm.environment.get(\"timestap\");\r",
+							" var part3 = \" GMT; path=/\";\r",
+							" var respect_content = part1+part2+part3;   //拼接预期返回cookie信息\r",
+							" //console.log(respect_content)\r",
+							" pm.environment.set(\"respect_content\", respect_content);\r",
+							"\r",
+							" pm.test(\"登出成功响应头检查\", function () {\r",
+							"        pm.response.to.include.header(\"Set-Cookie\",pm.environment.get(\"respect_content\"));\r",
+							" });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"followRedirects": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "http://localhost/agileone/index.php/common/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"agileone",
+						"index.php",
+						"common",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

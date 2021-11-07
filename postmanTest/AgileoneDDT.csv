@@ -1,0 +1,4 @@
+username1,password1,loginAssert,headline,content,proposalAssert,queryPage,queryAssert
+admin,admin,successful,This is a headline of proposal,this is a content of proposal,"/\d{1,5}/g",1,"/d{1,5}/g"
+admin,124,password_invalid,,,,,
+kjj,admin,user_invalid,,,,,

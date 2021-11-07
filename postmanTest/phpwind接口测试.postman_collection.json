@@ -1,0 +1,760 @@
+{
+	"info": {
+		"_postman_id": "a0e0ee9a-6400-4cc5-bbab-4cfa9fb831e6",
+		"name": "phpwind接口测试",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1.phpwind注册接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"登录接口返回验证\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"恭喜您！亲爱的会员，您已经注册成功\");\r",
+							"});\r",
+							"\r",
+							"var verify = responseBody.match(new RegExp('quit&verify=(.+?)\\\"'))[1];\r",
+							"console.log(verify)\r",
+							"\r",
+							"pm.environment.set(\"verify\", verify);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "forward",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "step",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "regname",
+							"value": "ytt{{$randomInt}}",
+							"type": "text"
+						},
+						{
+							"key": "regpwd",
+							"value": "qwe123",
+							"type": "text"
+						},
+						{
+							"key": "regpwdrepeat",
+							"value": "qwe123",
+							"type": "text"
+						},
+						{
+							"key": "regemail",
+							"value": "{{$timestamp}}@1176.com",
+							"type": "text"
+						},
+						{
+							"key": "rgpermit",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/PHPWIND/register.php?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"register.php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.phpwind登出接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"登出接口验证\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"您已经顺利退出网站\");\r",
+							"});\r",
+							"pm.environment.get(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/PHPWIND/login.php?action=quit&verify={{verify}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"login.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "quit"
+						},
+						{
+							"key": "verify",
+							"value": "{{verify}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.phpwind登录接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"登录返回检查\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(\"您已经顺利登录\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "forward",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "jumpurl",
+							"value": "http//localhost/PHPWIND/index.php",
+							"type": "text"
+						},
+						{
+							"key": "step",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "lgt",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "pwuser",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "pwpwd",
+							"value": "qwe123",
+							"type": "text"
+						},
+						{
+							"key": "hideid",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "cktime",
+							"value": "31536000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/PHPWIND/login.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"login.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4.phpwind获取verifycode接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var verifyhash = responseBody.match(new RegExp('verifyhash = \\'(.*?)\\''));\r",
+							"console.log(verifyhash[1]);\r",
+							"pm.environment.set(\"verifyhash\", verifyhash[1]);\r",
+							"var get_verify = pm.environment.get(\"verifyhash\");\r",
+							"console.log(get_verify)\r",
+							"\r",
+							"pm.test(\"verifycode验证\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(verifyhash[1]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/PHPWIND/index.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"index.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5.PHPwind发帖接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"发帖完毕点击进入主题列表\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(\"发帖完毕点击进入主题列表\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//自定义函数，作用是让接口在请求之前睡4秒\r",
+							"const sleep = (milliseconds) => {\r",
+							"       const start = Date.now();\r",
+							"while (Date.now() <= start + milliseconds) {}\r",
+							"};\r",
+							"sleep(4000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "magicname",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "magicid",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "verify",
+							"value": "{{verifyhash}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_title",
+							"value": "postman帖子标题{{$timestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_iconid",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_content",
+							"value": "postman帖子内容{{$timestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_autourl",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "atc_usesign",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "atc_convert",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "digest",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "topped",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_rvrc",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_enhidetype",
+							"value": "rvrc",
+							"type": "text"
+						},
+						{
+							"key": "atc_money",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_credittype",
+							"value": "money",
+							"type": "text"
+						},
+						{
+							"key": "atc_desc1",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "attachment_1; filename= \nContent-Type: application/octet-stream",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "att_special1",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "att_ctype1",
+							"value": "money",
+							"type": "text"
+						},
+						{
+							"key": "atc_needrvrc1",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "step",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "pid",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "action",
+							"value": "new",
+							"type": "text"
+						},
+						{
+							"key": "fid",
+							"value": "8",
+							"type": "text"
+						},
+						{
+							"key": "tid",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "article",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "special",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/PHPWIND/post.php?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"post.php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6.获取随机fid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var fid = responseBody.match(new RegExp('fid=(.*?)\\\" target=\\\"_blank\\\"'))\r",
+							"console.log(fid[1]);\r",
+							"pm.environment.set(\"fid\", fid[1]);\r",
+							"\r",
+							"pm.test(\"fid验证\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(fid[1]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/PHPWIND/index.php",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"index.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7.获取随机tid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//var tid1 = responseBody.match(new RegExp('打开新窗口\\\" href=\\\"read.php\\\\?tid=(.*?)\\\"'));\r",
+							"var tid = responseBody.match(new RegExp('read.php\\\\?tid=(.*?)&page=e'));  //正则表达式问号一定要用转义\r",
+							"pm.environment.set(\"tid\", tid[1]);\r",
+							"\r",
+							"pm.test(\"tid验证\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(tid[1]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/PHPWIND/thread.php?fid={{fid}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"thread.php"
+					],
+					"query": [
+						{
+							"key": "fid",
+							"value": "{{fid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.phpwind回帖接口",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"回帖验证\", function () {\r",
+							"       pm.expect(pm.response.text()).to.include(\"发帖完毕点击进入主题列表\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "magicname",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "magicid",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "verify",
+							"value": "{{verifyhash}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_title",
+							"value": "Re:这是回帖的标题{{$timestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_iconid",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_content",
+							"value": "这是回帖的内容{{$timestamp}}",
+							"type": "text"
+						},
+						{
+							"key": "atc_autourl",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "atc_usesign",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "atc_convert",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "atc_rvrc",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_enhidetype",
+							"value": "rvrc",
+							"type": "text"
+						},
+						{
+							"key": "atc_money",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "atc_credittype",
+							"value": "money",
+							"type": "text"
+						},
+						{
+							"key": "atc_desc1\"",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "attachment_1\"",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "Content-Type:application/octet-stream",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "att_special1",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "att_ctype1",
+							"value": "money",
+							"type": "text"
+						},
+						{
+							"key": "atc_needrvrc1",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "step",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "pid",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "action",
+							"value": "reply",
+							"type": "text"
+						},
+						{
+							"key": "fid",
+							"value": "{{fid}}",
+							"type": "text"
+						},
+						{
+							"key": "tid",
+							"value": "{{tid}}",
+							"type": "text"
+						},
+						{
+							"key": "article",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "special",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "filename",
+							"value": "\"\"",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/PHPWIND/post.php?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"post.php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9.phpwind登出接口",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"登出接口验证\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"您已经顺利退出网站\");\r",
+							"});\r",
+							"pm.environment.get(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/PHPWIND/login.php?action=quit&verify={{verify}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PHPWIND",
+						"login.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "quit"
+						},
+						{
+							"key": "verify",
+							"value": "{{verify}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
